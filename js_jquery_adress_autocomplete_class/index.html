@@ -16,6 +16,13 @@
 <body>
 
     <div class="ui-widget">
+        <label for="fbiSearch">Recherche FBI jsonFile data: </label><br>
+        <input type="search" name="adresse" id="fbiSearch"><br>
+        <small id="fbiInfo"></small>
+    </div>
+    <br />
+
+    <div class="ui-widget">
         <label for="adresseSearchInput">Recherche adresse: </label><br>
         <input type="search" name="adresse" id="adresseSearchInput"><br>
         <small id="info"></small>
@@ -68,9 +75,36 @@
     const adresse = new AutoComplete('adresseSearchInput', 'info'); // l'id de l'input et l'id de l'element info
     const array = new AutoComplete('arraySearchInput', 'info2');
     const object = new AutoComplete('objectSearchInput', 'info3');
+    const fbi = new AutoComplete('fbiSearch', 'fbiInfo');
+
     
     document.addEventListener('DOMContentLoaded', () => {   
-      
+
+        fbi.searchElement.addEventListener('input', async (e) => {
+          
+            if (fbi.searchElement.value.length < 3) {
+                fbi.resetResults();
+                fbi.displayMessage();
+                return;
+            }
+            try {
+
+                const results = await api.apiGet("./../datas/fbi.json");
+
+                if (results && results.items && results.items.length >= 1) {
+                    fbi.setObjectSearchResults(results.items.map(result => result));
+                    fbi.initializeAutocomplete(results.items.map(result => result.description ? result.description : "aucune"), (callBack) => {
+                        showResults(callBack)
+                    });
+
+                } else {
+                    console.log('No results found');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des résultats:', error);
+            }
+        });
+
         adresse.searchElement.addEventListener('input', async (e) => {
             if (adresse.searchElement.value.length < 3) {
                 adresse.resetResults();

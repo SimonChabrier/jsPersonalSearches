@@ -75,10 +75,11 @@ class AutoComplete {
     }
 
     initializeAutocomplete(results, dataCallback) {
-
+   
         $(`#${this.searchElementId}`).autocomplete({
             source: results,
             minLength: 3,
+            cache: false,
             autoFocus: true,
             select: (event, ui) => {
                 this.selectedData = this.getSelectedOption(ui.item.value);

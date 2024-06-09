@@ -8,9 +8,11 @@ const module = {
         try {
             const response = await fetch(url, { 
                 method: 'GET', 
+                cache: "no-cache",
             });
             module.checkResponseStatus(response) === false ? console.log(`Erreur: ${response.status}`) : console.log(`Success: ${response.status}`);
             const data = await response.json();
+            // console.log(data);
             return data;   
         } catch (error) {
             console.log(error);  
