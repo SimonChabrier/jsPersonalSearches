@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#">
+    <script src="/js_module_exemple/script.js" type="module"></script>
+    <title>Module syntax</title>
+</head>
+<body>
+
+    <h1>JS Module syntax</h1>
+    <p>Exemple de syntaxe javascript de déclaration exportation et importatiion d'un module.</p>
+    <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Modules" target="_blank">lien doc</a>
+    <br />
+
+</body>
+</html>
+
+<script type="module">
+
+    import module from '/js_module_exemple/script.js'
+    const data = await module.apiGet("https://dog.ceo/api/breeds/image/random");
+
+    const domTarget = document.querySelector("br")
+    const img = document.createElement("img");
+    
+    img.src = data.message;
+    domTarget.after(img);
+    
+    console.log(data);
+
+</script>
