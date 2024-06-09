@@ -1,5 +1,4 @@
 class AutoComplete {
-
     constructor(searchElementId, infoElementId) {
         
         this.results = [];
@@ -46,7 +45,7 @@ class AutoComplete {
         this.results = [];
     }
 
-    setAdresseSearchResults(results) { // formaté pour api api-adresse.data.gouv.fr
+    setAdresseSearchResults(results) { // passer le retour de la request api api-adresse.data.gouv.fr
      
         this.results = results.map(result => {
             const contextParts = result.properties.context.split(", ");
@@ -67,11 +66,11 @@ class AutoComplete {
         });
     }
 
-    setArraySearchResults(results) { // passer un array simple
+    setArraySearchResults(results) { // passer un array simple dans le quel on cherche
         this.results = results.map(data => ({ data }));
     }
 
-    setObjectSearchResults(results) { // passer un tableau d'objets
+    setObjectSearchResults(results) { // passer un tableau d'objets dans le quel on cherche
         this.results = results;
     }
 
