@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="#">
-    <script src="/js_module_exemple/script.js" type="module"></script>
+    <script src="/js_module_api/script.js" type="module"></script>
     <title>Module syntax</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
 
 <script type="module">
 
-    import module from '/js_module_exemple/script.js'
+    import module from '/js_module_api/script.js'
     const data = await module.apiGet("https://dog.ceo/api/breeds/image/random");
 
     const domTarget = document.querySelector("br")

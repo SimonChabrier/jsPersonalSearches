@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#">
+
+    <script src="../js_libraries/jquery/jquery.min.js" ></script>
+    <link rel="stylesheet" href="../js_libraries/jquery-ui/jquery-ui.min.css">
+    <script src="../js_libraries/jquery-ui/jquery-ui.min.js" ></script>
+    <script src="/../js_module_api/script.js" type="module"></script>
+    <script src="/js_jquery_adress_autocomplete_class/script.js" type="module"></script>
+
+    <title>Classe de recherche</title>
+</head>
+<body>
+
+    <div class="ui-widget">
+        <label for="adresseSearchInput">Recherche adresse: </label><br>
+        <input type="search" name="adresse" id="adresseSearchInput"><br>
+        <small id="info"></small>
+    </div>
+    <br />
+    <div class="ui-widget">
+        <label for="arraySearchInput">Recherche dans un tableau: </label><br>
+        <input type="search" name="adresse" id="arraySearchInput"><br>
+        <small id="info2"></small>
+    </div>
+    <br />
+    <div class="ui-widget">
+        <label for="objectSearchInput">Recherche dans un tableau d'objets: </label><br>
+        <input type="search" name="adresse" id="objectSearchInput"><br>
+        <small id="info3"></small>
+    </div>
+
+    <div id="results">
+    </div>
+
+</body>
+</html>
+
+<script type="module">
+
+    import api from '../js_module_api/script.js'
+    import AutoComplete from '/js_jquery_adress_autocomplete_class/script.js'
+
+    const datasArray = [
+        'simon',
+        'simone',
+        'simonee',
+        'simoneee',
+    ];
+    
+    const datasObjet = [{
+        "id": 1,
+        "name": "simon"
+    },
+    {
+        "id": 2,
+        "name": "simone"
+    },
+    {
+        "id": 3,
+        "name": "simonee"
+    }
+    ];
+    
+    const adresse = new AutoComplete('adresseSearchInput', 'info'); // l'id de l'input et l'id de l'element info
+    const array = new AutoComplete('arraySearchInput', 'info2');
+    const object = new AutoComplete('objectSearchInput', 'info3');
+    
+    document.addEventListener('DOMContentLoaded', () => {   
+      
+        adresse.searchElement.addEventListener('input', async (e) => {
+            if (adresse.searchElement.value.length < 3) {
+                adresse.resetResults();
+                adresse.displayMessage();
+                return;
+            }
+            try {
+                const results = await api.apiGet(`https://api-adresse.data.gouv.fr/search/?q=${adresse.setQuery(adresse.searchElement)}`);
+    
+                if (results && results.features && results.features.length >= 1) {
+                    adresse.setAdresseSearchResults(results.features.map(result => result));
+                    adresse.initializeAutocomplete(results.features.map(result => result.properties.label), (callBack) => {
+                        showResults(callBack)
+                    });
+
+                } else {
+                    console.log('No results found');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des résultats:', error);
+            }
+        });
+
+        array.searchElement.addEventListener('input', (e) => {
+            if (array.searchElement.value.length < 3) {
+                array.resetResults();
+                array.displayMessage();
+            } else {
+                array.setArraySearchResults(datasArray);
+                array.initializeAutocomplete(datasArray, (callBack) => {
+                    showResults(callBack)
+                });
+            }
+        });
+    
+        object.searchElement.addEventListener('input', (e) => {
+            if (object.searchElement.value.length < 3) {
+                object.resetResults();
+                object.displayMessage();
+            } else {
+                object.setObjectSearchResults(datasObjet);
+                object.initializeAutocomplete(datasObjet.map(result => result.name), (callBack) => {
+                    showResults(callBack)
+                });
+            }
+        });
+    
+    });
+
+    function showResults(callback) {
+        const domTarget = document.getElementById('results');
+        domTarget.innerHTML = '';
+        const ul = document.createElement('ul');
+        // callback est un objet avec clé et valeur 
+        for (const [key, value] of Object.entries(callback)) {
+            const li = document.createElement('li');
+            li.innerHTML = `${key} : ${value}`;
+            ul.appendChild(li);
+        }
+        domTarget.appendChild(ul);
+    }
+
+
+
+
+
+
+</script>
+
+
+
