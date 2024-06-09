@@ -2,8 +2,8 @@ class AutoComplete {
     constructor(searchElementId, infoElementId) {
         
         this.results = [];
-        this.searchElementId = searchElementId;
-        this.infoElementId = infoElementId;
+        this.searchElementId = searchElementId; // l'id de l'input depuis lequel on cherche eg 'inputA'
+        this.infoElementId = infoElementId; // l'id de l'élement ou afficher le texte d'info eg 'infoA'
         this.searchElement = null;
         this.infoElement = null;
         this.selectedData = null;
